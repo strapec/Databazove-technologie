@@ -58,3 +58,41 @@ SELECT product_name, total_amount,
 FROM fourmills_sales;
 
 --6. úloha
+SELECT mesiac, monthly_sales FROM(
+    SELECT extract(MONTH FROM sale_date) AS mesiac, sum(total_amount) AS monthly_sales
+    FROM fourmills_sales
+    GROUP BY mesiac
+    ORDER BY mesiac ASC
+);
+
+--7. úloha
+SELECT * FROM(
+    SELECT product_category, sum(total_amount) AS total_sales
+    FROM fourmills_sales
+    GROUP BY product_category
+)
+WHERE total_sales > 50000000
+ORDER BY total_sales DESC;
+
+--8. úloha
+SELECT product_name, product_category, total_amount FROM fourmills_sales t1
+WHERE total_amount > (
+    SELECT avg(total_amount) FROM fourmills_sales t2
+    WHERE t2.product_category = t1.product_category
+);
+
+--9. úloha
+SELECT product_name, region, total_amount, 
+(SELECT min(total_amount) AS region_min_amount FROM fourmills_sales t2
+    WHERE t2.region = t1.region)
+FROM fourmills_sales t1
+;
+
+--10. úloha
+SELECT * FROM fourmills_sales t1
+WHERE EXISTS (
+    SELECT product_name FROM fourmills_sales t2
+    WHERE t2.product_name = t1.product_name
+    GROUP BY t2.product_name
+    HAVING count(DISTINCT extract(MONTH FROM sale_date)) >1
+);
