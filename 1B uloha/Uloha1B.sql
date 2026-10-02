@@ -25,3 +25,36 @@ CREATE Table fourmills_sales(
 );
 
 SELECT * FROM fourmills_sales;
+
+--2. úloha
+SELECT product_name, total_amount FROM fourmills_sales
+WHERE total_amount > 
+    (SELECT AVG(total_amount)
+    FROM fourmills_sales);
+
+--3. úloha
+SELECT sales_id, sale_date, region, product_category FROM fourmills_sales
+WHERE product_category =(
+    SELECT product_category FROM fourmills_sales
+    GROUP BY product_category
+    ORDER BY sum(total_amount) DESC
+    LIMIT 1
+)
+ORDER BY sales_id ASC;
+
+
+--4. úloha
+SELECT product_name, total_amount,(
+        SELECT avg(total_amount)
+        FROM fourmills_sales)
+        AS avg_amount
+FROM fourmills_sales;
+
+--5. úloha
+SELECT product_name, total_amount,
+    (total_amount / (SELECT sum(total_amount)
+    FROM fourmills_sales))
+    AS amount_share
+FROM fourmills_sales;
+
+--6. úloha
