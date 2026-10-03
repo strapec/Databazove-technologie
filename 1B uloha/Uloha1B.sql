@@ -96,3 +96,49 @@ WHERE EXISTS (
     GROUP BY t2.product_name
     HAVING count(DISTINCT extract(MONTH FROM sale_date)) >1
 );
+
+--11. úloha
+SELECT product_category, product_name, total_amount FROM fourmills_sales t1
+WHERE EXISTS(
+    SELECT 1
+    FROM fourmills_sales t2
+    WHERE t2.product_category = t1.product_category
+    AND total_amount > 200000
+);
+
+--12. úloha
+SELECT product_category FROM fourmills_sales t1
+WHERE EXISTS(
+    SELECT 1
+    FROM fourmills_sales t2
+    WHERE t2.product_category = t1.product_category
+)
+GROUP BY product_category
+HAVING count(DISTINCT region) > 3;
+
+--13. úloha
+SELECT * FROM fourmills_sales t1
+WHERE EXISTS(
+    SELECT 1
+    FROM fourmills_sales t2
+    WHERE t2.region = t1.region
+    AND extract(YEAR FROM sale_date) = 2024
+);
+
+--14. úloha
+SELECT DISTINCT product_category FROM fourmills_sales t1
+WHERE NOT EXISTS(
+    SELECT 1
+    FROM fourmills_sales t2
+    WHERE t2.product_category = t1.product_category
+    AND total_amount > 500000
+);
+
+--15. úloha
+SELECT region FROM fourmills_sales t1
+WHERE NOT EXISTS(
+    SELECT 1
+    FROM fourmills_sales t2
+    WHERE t2.region = t1.region
+    AND product_category LIKE 'Flour'
+);
