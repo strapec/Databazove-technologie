@@ -1,0 +1,2 @@
+-- Active: 1790866429854@@127.0.0.1@5432@superstore@public
+--1. úloha
